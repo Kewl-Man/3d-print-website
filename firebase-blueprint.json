@@ -1,0 +1,250 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "3D printable product item available in the menu catalog.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique product identifier slug.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Display name of the 3D printed item.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "price": {
+          "type": "number",
+          "description": "Unit price in USD cash."
+        },
+        "category": {
+          "type": "string",
+          "description": "Product category.",
+          "enum": ["Fidgets", "Flexi Toys", "Desk Gear"]
+        },
+        "description": {
+          "type": "string",
+          "description": "Short item description.",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Image URL or relative asset path.",
+          "maxLength": 500
+        },
+        "inStock": {
+          "type": "boolean",
+          "description": "Whether the item is currently available to request."
+        },
+        "colors": {
+          "type": "array",
+          "description": "List of available filament colors (1 to 12 items)."
+        },
+        "sortOrder": {
+          "type": "integer",
+          "description": "Display ordering index."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "price",
+        "category",
+        "description",
+        "imageUrl",
+        "inStock",
+        "colors",
+        "sortOrder",
+        "updatedAt"
+      ]
+    },
+    "StoreSettings": {
+      "title": "StoreSettings",
+      "description": "Global storefront configuration and initialization flag.",
+      "type": "object",
+      "properties": {
+        "ntfyTopic": {
+          "type": "string",
+          "description": "ntfy.sh notification topic name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "demoVideoUrl": {
+          "type": "string",
+          "description": "Optional YouTube or video URL.",
+          "maxLength": 500
+        },
+        "catalogInitialized": {
+          "type": "boolean",
+          "description": "True once the initial default catalog has been seeded so deleted products never reappear."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last settings update."
+        }
+      },
+      "required": [
+        "ntfyTopic",
+        "demoVideoUrl",
+        "catalogInitialized",
+        "updatedAt"
+      ]
+    },
+    "PrintOrder": {
+      "title": "PrintOrder",
+      "description": "Customer 3D print request to be paid in cash in person.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique order identifier.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Referenced product ID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "productTitle": {
+          "type": "string",
+          "description": "Snapshot title of ordered product.",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "unitPrice": {
+          "type": "number",
+          "description": "Unit price snapshot in USD."
+        },
+        "colorName": {
+          "type": "string",
+          "description": "Selected filament color name.",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "quantity": {
+          "type": "integer",
+          "description": "Requested quantity (1 to 4)."
+        },
+        "totalPrice": {
+          "type": "number",
+          "description": "Calculated cash total in USD."
+        },
+        "buyerName": {
+          "type": "string",
+          "description": "Name of buyer.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "contactMethod": {
+          "type": "string",
+          "description": "Preferred contact channel.",
+          "enum": ["Phone", "Discord", "Email"]
+        },
+        "contact": {
+          "type": "string",
+          "description": "Phone number, Discord handle, or email address.",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional custom color mix or pickup notes.",
+          "maxLength": 500
+        },
+        "status": {
+          "type": "string",
+          "description": "Order fulfillment status.",
+          "enum": ["Pending", "Completed"]
+        },
+        "ntfySent": {
+          "type": "boolean",
+          "description": "Whether push notification succeeded."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of order creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last status update."
+        }
+      },
+      "required": [
+        "id",
+        "productId",
+        "productTitle",
+        "unitPrice",
+        "colorName",
+        "quantity",
+        "totalPrice",
+        "buyerName",
+        "contactMethod",
+        "contact",
+        "notes",
+        "status",
+        "ntfySent",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Allowlisted store administrator UID record.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Admin Google account email.",
+          "maxLength": 200
+        },
+        "role": {
+          "type": "string",
+          "description": "Admin role.",
+          "enum": ["admin"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Record creation time."
+        }
+      },
+      "required": ["email", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Public catalog items readable by all visitors and writable only by verified store admins."
+    },
+    "/settings/{settingId}": {
+      "schema": { "$ref": "#/entities/StoreSettings" },
+      "description": "Public storefront settings document (settings/public) readable by visitors and writable only by admins."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/PrintOrder" },
+      "description": "Print orders creatable by visitors (referencing in-stock products) and readable/updatable/deletable only by verified store admins."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Read-only admin role allowlist documents."
+    }
+  }
+}

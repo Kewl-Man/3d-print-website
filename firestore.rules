@@ -1,0 +1,163 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (
+          request.auth.token.email == 'koolm6948@gmail.com' &&
+          request.auth.token.email_verified == true
+        )
+      );
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll([
+          'id', 'title', 'price', 'category', 'description',
+          'imageUrl', 'inStock', 'colors', 'sortOrder', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'title', 'price', 'category', 'description',
+          'imageUrl', 'inStock', 'colors', 'sortOrder', 'updatedAt'
+        ])
+        && isValidId(data.id)
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 120
+        && data.price is number && data.price > 0 && data.price <= 10000
+        && data.category in ['Fidgets', 'Flexi Toys', 'Desk Gear']
+        && data.description is string && data.description.size() >= 1 && data.description.size() <= 1000
+        && data.imageUrl is string && data.imageUrl.size() <= 500
+        && data.inStock is bool
+        && data.colors is list && data.colors.size() >= 1 && data.colors.size() <= 12
+        && data.colors[0] is string && data.colors[0].size() >= 1 && data.colors[0].size() <= 40
+        && data.sortOrder is int && data.sortOrder >= 0 && data.sortOrder <= 100000
+        && data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function isValidSettings(data) {
+      return data.keys().hasAll(['ntfyTopic', 'demoVideoUrl', 'catalogInitialized', 'updatedAt'])
+        && data.keys().hasOnly(['ntfyTopic', 'demoVideoUrl', 'catalogInitialized', 'updatedAt'])
+        && data.ntfyTopic is string && data.ntfyTopic.size() >= 1 && data.ntfyTopic.size() <= 120
+        && data.demoVideoUrl is string && data.demoVideoUrl.size() <= 500
+        && data.catalogInitialized is bool
+        && data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+          'id', 'productId', 'productTitle', 'unitPrice', 'colorName',
+          'quantity', 'totalPrice', 'buyerName', 'contactMethod', 'contact',
+          'notes', 'status', 'ntfySent', 'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'productId', 'productTitle', 'unitPrice', 'colorName',
+          'quantity', 'totalPrice', 'buyerName', 'contactMethod', 'contact',
+          'notes', 'status', 'ntfySent', 'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.id)
+        && isValidId(data.productId)
+        && data.productTitle is string && data.productTitle.size() >= 1 && data.productTitle.size() <= 140
+        && data.unitPrice is number && data.unitPrice > 0 && data.unitPrice <= 10000
+        && data.colorName is string && data.colorName.size() >= 1 && data.colorName.size() <= 60
+        && data.quantity is int && data.quantity >= 1 && data.quantity <= 4
+        && data.totalPrice is number && data.totalPrice > 0 && data.totalPrice <= 40000
+        && data.buyerName is string && data.buyerName.size() >= 1 && data.buyerName.size() <= 80
+        && data.contactMethod in ['Phone', 'Discord', 'Email']
+        && data.contact is string && data.contact.size() >= 1 && data.contact.size() <= 140
+        && data.notes is string && data.notes.size() <= 500
+        && data.status in ['Pending', 'Completed']
+        && data.ntfySent is bool
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    match /products/{productId} {
+      allow get: if isValidId(productId);
+      allow list: if true;
+      allow create: if isAdmin()
+        && isValidId(productId)
+        && isValidProduct(incoming())
+        && incoming().id == productId;
+      allow update: if isAdmin()
+        && isValidId(productId)
+        && isValidProduct(incoming())
+        && incoming().id == existing().id
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'title', 'price', 'category', 'description',
+          'imageUrl', 'inStock', 'colors', 'sortOrder', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(productId);
+    }
+
+    match /settings/{settingId} {
+      allow get: if isValidId(settingId) && settingId == 'public';
+      allow list: if false;
+      allow create: if isAdmin()
+        && isValidId(settingId)
+        && settingId == 'public'
+        && isValidSettings(incoming());
+      allow update: if isAdmin()
+        && isValidId(settingId)
+        && settingId == 'public'
+        && isValidSettings(incoming())
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'ntfyTopic', 'demoVideoUrl', 'catalogInitialized', 'updatedAt'
+        ]);
+      allow delete: if false;
+    }
+
+    match /orders/{orderId} {
+      allow get: if isAdmin() && isValidId(orderId);
+      allow list: if isAdmin();
+      allow create: if isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().id == orderId
+        && incoming().status == 'Pending'
+        && incoming().createdAt == request.time
+        && exists(/databases/$(database)/documents/products/$(incoming().productId))
+        && get(/databases/$(database)/documents/products/$(incoming().productId)).data.inStock == true
+        && incoming().unitPrice == get(/databases/$(database)/documents/products/$(incoming().productId)).data.price
+        && incoming().totalPrice >= (incoming().unitPrice * incoming().quantity) - 0.01
+        && incoming().totalPrice <= (incoming().unitPrice * incoming().quantity) + 0.01;
+      allow update: if isAdmin()
+        && isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().id == existing().id
+        && incoming().productId == existing().productId
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']);
+      allow delete: if isAdmin() && isValidId(orderId);
+    }
+
+    match /admins/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isAdmin());
+      allow list, create, update, delete: if false;
+    }
+
+    match /test/{docId} {
+      allow get: if docId == 'connection';
+      allow list, write: if false;
+    }
+  }
+}

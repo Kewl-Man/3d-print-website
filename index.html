@@ -1,0 +1,1971 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Prints Menu</title>
+  <meta name="description" content="Custom 3D printed fidgets, flexi toys, and desk gear menu. Pick an item, choose a color, and pay cash in person." />
+  <meta property="og:title" content="3D Prints Menu" />
+  <meta property="og:description" content="Custom 3D printed fidgets, flexi toys, and desk gear menu. Pick an item, choose a color, and pay cash in person." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fruktur&family=JetBrains+Mono:wght@500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-studio: #171b22;
+      --bg-studio-deep: #10141b;
+      --glass-core: rgba(255, 255, 255, 0.085);
+      --glass-core-hover: rgba(255, 255, 255, 0.13);
+      --glass-core-strong: rgba(34, 40, 50, 0.72);
+      --glass-lens-bg: linear-gradient(155deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.11) 52%, rgba(255, 255, 255, 0.20) 100%);
+      --glass-border: rgba(255, 255, 255, 0.20);
+      --glass-border-bright: rgba(255, 255, 255, 0.38);
+      --glass-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.36),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.12),
+        inset 1px 0 1px rgba(255, 255, 255, 0.14),
+        0 18px 42px rgba(0, 0, 0, 0.38);
+      --glass-shadow-hover:
+        inset 0 1.5px 1.5px rgba(255, 255, 255, 0.52),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.18),
+        inset 1px 0 1.5px rgba(255, 255, 255, 0.22),
+        0 26px 56px rgba(0, 0, 0, 0.48);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-emerald: #34d399;
+      --accent-cyan: #38bdf8;
+      --accent-blue: #60a5fa;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --ease-liquid: cubic-bezier(0.22, 1.24, 0.36, 1);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+      background-color: var(--bg-studio);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    select option {
+      background-color: #1c222d;
+      color: #f8fafc;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg-studio);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-bottom: 118px;
+      position: relative;
+    }
+
+    /* Studio Slate Backdrop + Soft Luminous Color Pools (Refracted through Liquid Glass) */
+    .liquid-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      background: linear-gradient(165deg, #1d222b 0%, #161a21 55%, #12161d 100%);
+    }
+
+    .light-pool {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(88px);
+      will-change: transform;
+      animation: poolDrift 20s ease-in-out infinite alternate;
+    }
+
+    .light-pool-emerald {
+      width: 480px;
+      height: 380px;
+      bottom: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.45) 0%, rgba(20, 184, 166, 0.14) 55%, transparent 75%);
+    }
+
+    .light-pool-blue {
+      width: 520px;
+      height: 440px;
+      top: -120px;
+      left: 8%;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.32) 0%, rgba(59, 130, 246, 0.14) 55%, transparent 75%);
+      animation-delay: -7s;
+    }
+
+    .light-pool-teal {
+      width: 460px;
+      height: 420px;
+      top: 28%;
+      right: -90px;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.28) 0%, rgba(14, 165, 233, 0.12) 55%, transparent 75%);
+      animation-delay: -13s;
+    }
+
+    @keyframes poolDrift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(28px, -22px, 0) scale(1.08); }
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+      font-family: var(--font-display);
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+    }
+
+    p { margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; color: inherit; }
+
+    :focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.85);
+      outline-offset: 2px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 0 32px; }
+    }
+
+    /* True Apple-Style Liquid Glass Surface */
+    .liquid-glass {
+      position: relative;
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.115) 0%, rgba(255, 255, 255, 0.045) 55%, rgba(255, 255, 255, 0.085) 100%);
+      backdrop-filter: blur(28px) saturate(185%);
+      -webkit-backdrop-filter: blur(28px) saturate(185%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+    }
+
+    .liquid-interactive {
+      --gx: 50%;
+      --gy: 20%;
+      transition: transform 280ms var(--ease-liquid), background 240ms var(--ease-smooth), box-shadow 260ms var(--ease-smooth), border-color 220ms var(--ease-smooth);
+    }
+
+    .liquid-interactive::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: radial-gradient(
+        320px circle at var(--gx) var(--gy),
+        rgba(255, 255, 255, 0.24),
+        rgba(56, 189, 248, 0.08) 42%,
+        transparent 72%
+      );
+      opacity: 0;
+      transition: opacity 220ms var(--ease-smooth);
+      z-index: 1;
+    }
+
+    .liquid-interactive:hover::before {
+      opacity: 1;
+    }
+
+    .liquid-interactive > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Entrance & Scroll Fly-In Animations (GPU compositor-only transform + opacity) */
+    @keyframes flyInUp {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    @keyframes dockFlyIn {
+      0% {
+        opacity: 0;
+        transform: translate3d(-50%, 34px, 0) scale(0.92);
+      }
+      100% {
+        opacity: 1;
+        transform: translate3d(-50%, 0, 0) scale(1);
+      }
+    }
+
+    .fly-in {
+      opacity: 0;
+      animation: flyInUp 540ms var(--ease-liquid) forwards;
+      animation-delay: var(--delay, 0ms);
+      will-change: transform, opacity;
+    }
+
+    /* Home / Welcome Load Liquid-Glass Glow Pulse & Light Refraction (100% GPU transform + opacity) */
+    .pulse-caustic-wave {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      width: 980px;
+      height: 620px;
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate3d(-50%, 0, 0) scale(0.45);
+      background:
+        radial-gradient(circle at 38% 44%, rgba(56, 189, 248, 0.56) 0%, rgba(56, 189, 248, 0.18) 38%, transparent 70%),
+        radial-gradient(circle at 64% 56%, rgba(52, 211, 153, 0.50) 0%, rgba(16, 185, 129, 0.16) 40%, transparent 72%),
+        radial-gradient(circle at 50% 48%, rgba(186, 230, 253, 0.42) 0%, transparent 62%);
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .pulse-caustic-ring {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      width: 820px;
+      height: 520px;
+      border-radius: 50%;
+      opacity: 0;
+      transform: translate3d(-50%, 0, 0) scale(0.35);
+      background: radial-gradient(
+        ellipse at center,
+        transparent 30%,
+        rgba(125, 211, 252, 0.36) 48%,
+        rgba(52, 211, 153, 0.34) 60%,
+        rgba(129, 140, 248, 0.22) 70%,
+        transparent 80%
+      );
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    @keyframes homeCausticSweep {
+      0% {
+        opacity: 0;
+        transform: translate3d(-50%, -40px, 0) scale(0.45);
+      }
+      24% {
+        opacity: 0.95;
+        transform: translate3d(-50%, 10px, 0) scale(1.04);
+      }
+      62% {
+        opacity: 0.65;
+        transform: translate3d(-50%, 160px, 0) scale(1.32);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(-50%, 320px, 0) scale(1.62);
+      }
+    }
+
+    @keyframes homeRingExpand {
+      0% {
+        opacity: 0;
+        transform: translate3d(-50%, -10px, 0) scale(0.35);
+      }
+      26% {
+        opacity: 0.9;
+        transform: translate3d(-50%, 60px, 0) scale(1.05);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(-50%, 260px, 0) scale(1.95);
+      }
+    }
+
+    @keyframes glassHaloOpacityPulse {
+      0% { opacity: 0; }
+      26% { opacity: 1; }
+      62% { opacity: 0.68; }
+      100% { opacity: 0; }
+    }
+
+    @keyframes glassCausticShimmer {
+      0% {
+        opacity: 0;
+        transform: translate3d(-115%, -14%, 0) skewX(-18deg);
+      }
+      28% {
+        opacity: 0.9;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(135%, 14%, 0) skewX(-18deg);
+      }
+    }
+
+    @keyframes titleLiquidBreath {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .welcome-caustic-clip {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .welcome-caustic-sweep {
+      position: absolute;
+      inset: -35% -18%;
+      opacity: 0;
+      background: linear-gradient(
+        105deg,
+        transparent 18%,
+        rgba(56, 189, 248, 0.24) 38%,
+        rgba(255, 255, 255, 0.42) 50%,
+        rgba(52, 211, 153, 0.24) 62%,
+        transparent 82%
+      );
+      will-change: transform, opacity;
+    }
+
+    /* Pre-painted static glow halos (only opacity animates = 0 repaint, 60fps+) */
+    .welcome-glass-card::after,
+    #storefront-view .product-card::after,
+    #storefront-view .pickup-shell::after,
+    #storefront-view #category-pill-track::after,
+    .floating-glass-dock::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 3;
+      border: 1.5px solid rgba(165, 243, 252, 0.78);
+      box-shadow:
+        inset 0 1.5px 14px rgba(255, 255, 255, 0.36),
+        inset 0 -1.5px 14px rgba(52, 211, 153, 0.22),
+        0 0 28px rgba(56, 189, 248, 0.38),
+        0 0 56px rgba(52, 211, 153, 0.20);
+      will-change: opacity;
+    }
+
+    #storefront-view .welcome-actions .glass-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 3;
+      border: 1.5px solid rgba(186, 230, 253, 0.85);
+      box-shadow:
+        inset 0 0 16px rgba(255, 255, 255, 0.45),
+        inset 0 0 26px rgba(56, 189, 248, 0.38);
+      will-change: opacity;
+    }
+
+    body.home-pulse-active .pulse-caustic-wave {
+      animation: homeCausticSweep 2400ms var(--ease-smooth) forwards;
+    }
+
+    body.home-pulse-active .pulse-caustic-ring {
+      animation: homeRingExpand 2500ms var(--ease-smooth) 120ms forwards;
+    }
+
+    body.home-pulse-active .welcome-glass-card::after {
+      animation: glassHaloOpacityPulse 2200ms var(--ease-smooth) 180ms forwards;
+    }
+
+    body.home-pulse-active .welcome-caustic-sweep {
+      animation: glassCausticShimmer 1750ms var(--ease-smooth) 220ms forwards;
+    }
+
+    body.home-pulse-active .welcome-title {
+      animation: titleLiquidBreath 1900ms var(--ease-liquid) 200ms;
+    }
+
+    body.home-pulse-active #storefront-view .welcome-actions .glass-btn::after {
+      animation: glassHaloOpacityPulse 1850ms var(--ease-smooth) 320ms forwards;
+    }
+
+    body.home-pulse-active #storefront-view #category-pill-track::after {
+      animation: glassHaloOpacityPulse 1900ms var(--ease-smooth) 420ms forwards;
+    }
+
+    body.home-pulse-active #storefront-view .product-card::after {
+      animation: glassHaloOpacityPulse 1950ms var(--ease-smooth) calc(var(--delay, 150ms) + 280ms) forwards;
+    }
+
+    body.home-pulse-active #storefront-view .pickup-shell::after {
+      animation: glassHaloOpacityPulse 2000ms var(--ease-smooth) 650ms forwards;
+    }
+
+    body.home-pulse-active .floating-glass-dock::after {
+      animation: glassHaloOpacityPulse 2050ms var(--ease-smooth) 480ms forwards;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0) scale(0.96);
+      transition: opacity 540ms var(--ease-smooth), transform 620ms var(--ease-liquid);
+      transition-delay: var(--delay, 0ms);
+    }
+
+    .scroll-reveal.is-visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    /* Liquid Glass Pill & Circular Buttons (Reference: image_d5435b9c.png) */
+    .glass-btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+      color: var(--text-primary);
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 55%, rgba(255, 255, 255, 0.12) 100%);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.44),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.14),
+        0 10px 26px rgba(0, 0, 0, 0.32);
+      transition: transform 220ms var(--ease-liquid), box-shadow 220ms var(--ease-smooth), background 220ms var(--ease-smooth), border-color 220ms var(--ease-smooth), opacity 160ms;
+    }
+
+    .glass-btn:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.015);
+      border-color: rgba(255, 255, 255, 0.42);
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.10) 55%, rgba(255, 255, 255, 0.18) 100%);
+      box-shadow:
+        inset 0 1.5px 1.5px rgba(255, 255, 255, 0.58),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.2),
+        0 16px 34px rgba(0, 0, 0, 0.4);
+    }
+
+    .glass-btn:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    .glass-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .glass-btn-accent {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.36) 0%, rgba(16, 185, 129, 0.32) 100%);
+      border-color: rgba(125, 211, 252, 0.48);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.54),
+        inset 0 -1.5px 2px rgba(56, 189, 248, 0.22),
+        0 12px 30px rgba(14, 165, 233, 0.22);
+    }
+
+    .glass-btn-accent:hover:not(:disabled) {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.48) 0%, rgba(16, 185, 129, 0.42) 100%);
+      border-color: rgba(186, 230, 253, 0.65);
+    }
+
+    .glass-btn-danger {
+      background: linear-gradient(135deg, rgba(248, 113, 113, 0.26) 0%, rgba(220, 38, 38, 0.18) 100%);
+      border-color: rgba(252, 165, 165, 0.35);
+      color: #fecaca;
+    }
+
+    .glass-circle-btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    /* Fluid Sliding Liquid Glass Lens inside Pill Navs */
+    .sliding-pill-track {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding: 5px;
+      border-radius: 999px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+      backdrop-filter: blur(26px) saturate(185%);
+      -webkit-backdrop-filter: blur(26px) saturate(185%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.30),
+        inset 0 -1px 1px rgba(255, 255, 255, 0.12),
+        0 14px 36px rgba(0, 0, 0, 0.36);
+      max-width: 100%;
+    }
+
+    .sliding-glass-lens {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      left: 0;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 1;
+      background: var(--glass-lens-bg);
+      backdrop-filter: blur(14px) saturate(220%) brightness(1.25);
+      -webkit-backdrop-filter: blur(14px) saturate(220%) brightness(1.25);
+      border: 1px solid rgba(255, 255, 255, 0.44);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.68),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.22),
+        0 6px 18px rgba(0, 0, 0, 0.28);
+      transition:
+        transform 400ms var(--ease-liquid),
+        width 360ms var(--ease-liquid);
+      will-change: transform, width;
+    }
+
+    .sliding-glass-lens.is-flowing {
+      filter: brightness(1.16) saturate(1.25);
+    }
+
+    .pill-tab-btn {
+      position: relative;
+      z-index: 2;
+      min-height: 38px;
+      padding: 7px 16px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: color 200ms var(--ease-smooth), transform 180ms var(--ease-liquid);
+    }
+
+    .pill-tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .pill-tab-btn:active {
+      transform: scale(0.95);
+    }
+
+    .pill-tab-btn[aria-pressed="true"],
+    .pill-tab-btn[aria-selected="true"] {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Floating Bottom Liquid Glass Dock (Reference: image_e8673253.png) */
+    .floating-glass-dock-wrap {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+      z-index: 50;
+      max-width: calc(100vw - 24px);
+      animation: dockFlyIn 680ms var(--ease-liquid) forwards;
+    }
+
+    .floating-glass-dock {
+      padding: 6px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: linear-gradient(160deg, rgba(28, 33, 42, 0.80) 0%, rgba(16, 20, 28, 0.76) 100%);
+      backdrop-filter: blur(36px) saturate(210%);
+      -webkit-backdrop-filter: blur(36px) saturate(210%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.44),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.14),
+        0 20px 50px rgba(0, 0, 0, 0.56);
+    }
+
+    .dock-item {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      min-width: 78px;
+      min-height: 50px;
+      padding: 7px 14px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 200ms var(--ease-smooth), transform 180ms var(--ease-liquid);
+    }
+
+    @media (min-width: 640px) {
+      .dock-item {
+        min-width: 92px;
+        padding: 8px 18px;
+        font-size: 0.75rem;
+      }
+    }
+
+    .dock-item svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 1.9;
+    }
+
+    .dock-item:hover {
+      color: #ffffff;
+    }
+
+    .dock-item:active {
+      transform: scale(0.93);
+    }
+
+    .dock-item[aria-current="page"] {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Welcome Hero Section */
+    .welcome-section {
+      padding: 46px 0 26px;
+    }
+
+    @media (min-width: 768px) {
+      .welcome-section {
+        padding: 64px 0 34px;
+      }
+    }
+
+    .welcome-glass-card {
+      border-radius: 32px;
+      padding: 36px 26px;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      .welcome-glass-card {
+        padding: 48px 44px;
+      }
+    }
+
+    .welcome-title {
+      font-family: Fruktur;
+      font-size: 75.32px;
+      font-weight: normal;
+      line-height: 60.666399999999996px;
+      letter-spacing: -0.04em;
+      display: inline-block;
+      padding: 4px 10px;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(224, 242, 254, 0.92) 52%,
+        rgba(167, 243, 208, 0.84) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 6px 22px rgba(56, 189, 248, 0.25));
+      margin-bottom: 14px;
+    }
+
+    .welcome-copy {
+      font-size: clamp(1rem, 1.8vw, 1.15rem);
+      color: var(--text-secondary);
+      max-width: 54ch;
+      margin: 0 auto 24px;
+      line-height: 1.65;
+      text-wrap: balance;
+    }
+
+    .welcome-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* Catalog Section */
+    .catalog-section {
+      padding: 18px 0 46px;
+      scroll-margin-top: 24px;
+    }
+
+    .section-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    @media (min-width: 900px) {
+      .section-top {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .section-title {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 700;
+    }
+
+    .section-subtitle {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .catalog-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media (min-width: 900px) {
+      .catalog-controls {
+        justify-content: flex-end;
+      }
+    }
+
+    .sort-box {
+      position: relative;
+      flex: 0 1 auto;
+    }
+
+    .sort-select {
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 48px;
+      padding: 10px 38px 10px 18px;
+      border-radius: 999px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.28), 0 10px 28px rgba(0, 0, 0, 0.28);
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      font-size: 0.86rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: border-color 200ms, background 200ms, box-shadow 200ms;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+      border-color: rgba(125, 211, 252, 0.55);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    .sort-chevron {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1 1 190px;
+      max-width: 230px;
+    }
+
+    .search-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 18px 10px 42px;
+      border-radius: 999px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.28), 0 10px 28px rgba(0, 0, 0, 0.28);
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      transition: border-color 200ms, background 200ms, box-shadow 200ms;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-input:focus {
+      outline: none;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+      border-color: rgba(125, 211, 252, 0.55);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* Product Cards (Clickable -> Product Detail Page) */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 640px) {
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 26px;
+      }
+    }
+
+    .product-card {
+      border-radius: 26px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px) scale(1.01);
+      border-color: var(--glass-border-bright);
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.06) 55%, rgba(255, 255, 255, 0.11) 100%);
+      box-shadow: var(--glass-shadow-hover);
+    }
+
+    .card-media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      background: #10141c;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 380ms var(--ease-smooth);
+    }
+
+    .product-card:hover .card-media img {
+      transform: scale(1.045);
+    }
+
+    .card-svg-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+      background: radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.16), rgba(16, 20, 28, 0.96));
+    }
+
+    .card-body {
+      padding: 16px 8px 8px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+
+    .card-meta-line {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .stock-label-in { color: var(--accent-emerald); font-weight: 600; }
+    .stock-label-out { color: var(--warning); font-weight: 600; }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.28;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .swatch-section {
+      margin-top: auto;
+      padding-top: 4px;
+    }
+
+    .swatch-active-text {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .swatch-active-name {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .swatch-list {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .swatch-btn {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 180ms var(--ease-liquid);
+    }
+
+    .swatch-btn:hover { transform: scale(1.14); }
+    .swatch-btn:active { transform: scale(0.92); }
+
+    .swatch-circle {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.45), 0 2px 6px rgba(0, 0, 0, 0.45);
+      display: block;
+    }
+
+    .swatch-btn[aria-pressed="true"] .swatch-circle {
+      outline: 2.5px solid #ffffff;
+      outline-offset: 2px;
+      border-color: transparent;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .card-price {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .empty-catalog {
+      grid-column: 1 / -1;
+      padding: 48px 24px;
+      border-radius: 26px;
+      text-align: center;
+    }
+
+    /* Product Detail Page View */
+    .product-detail-view {
+      padding: 18px 0 36px;
+      animation: flyInUp 420ms var(--ease-liquid) forwards;
+    }
+
+    .detail-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .detail-shell {
+      border-radius: 32px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (min-width: 960px) {
+      .detail-shell {
+        padding: 24px 28px;
+        grid-template-columns: 1.02fr 0.98fr;
+        gap: 32px;
+      }
+    }
+
+    .detail-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-main-frame {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #10141c;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 18px 40px rgba(0, 0, 0, 0.42);
+    }
+
+    .detail-main-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 350ms var(--ease-smooth);
+    }
+
+    .detail-main-frame.is-zoomed img {
+      transform: scale(1.22);
+    }
+
+    .detail-color-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .detail-info-header {
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      margin-bottom: 12px;
+    }
+
+    .detail-price-tag {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    /* Unified Liquid Glass Stepper Pill (Reference: image_d5435b9c.png) */
+    .liquid-stepper-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 46px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -1.5px 2px rgba(255, 255, 255, 0.14),
+        0 10px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    .stepper-icon-btn {
+      width: 40px;
+      height: 36px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 160ms, transform 140ms var(--ease-liquid);
+    }
+
+    .stepper-icon-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .stepper-icon-btn:active {
+      transform: scale(0.88);
+    }
+
+    .stepper-num-input {
+      width: 44px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: #ffffff;
+    }
+
+    /* Form Controls */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 11px;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 520px) {
+      .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+    }
+
+    .field-input, .field-select, .field-textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 15px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.16);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      transition: border-color 180ms, background 180ms, box-shadow 180ms;
+    }
+
+    .field-textarea {
+      min-height: 54px;
+      resize: vertical;
+    }
+
+    .field-input::placeholder,
+    .field-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(125, 211, 252, 0.65);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+    }
+
+    .field-error {
+      font-size: 0.8rem;
+      color: var(--danger);
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    .cash-summary-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(16, 185, 129, 0.14));
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+
+    .cash-total-amount {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .receipt-box {
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.16), rgba(56, 189, 248, 0.10));
+      border: 1px solid rgba(110, 231, 183, 0.36);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      animation: flyInUp 420ms var(--ease-liquid) forwards;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.9rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    /* How Pickup Works Section */
+    .pickup-section {
+      padding: 12px 0 36px;
+      scroll-margin-top: 24px;
+    }
+
+    .pickup-shell {
+      border-radius: 30px;
+      padding: 28px 24px;
+    }
+
+    @media (min-width: 768px) {
+      .pickup-shell { padding: 34px 38px; }
+    }
+
+    .pickup-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    @media (min-width: 768px) {
+      .pickup-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+    }
+
+    .pickup-step-card {
+      border-radius: 22px;
+      padding: 22px;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 10px 26px rgba(0, 0, 0, 0.24);
+      transition: transform 240ms var(--ease-liquid), border-color 220ms var(--ease-smooth), background 220ms var(--ease-smooth);
+    }
+
+    .pickup-step-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.34);
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+    }
+
+    .pickup-step-num {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+    }
+
+    .pickup-step-title {
+      font-family: var(--font-display);
+      font-size: 1.06rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text-primary);
+    }
+
+    .pickup-step-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      line-height: 1.55;
+    }
+
+    /* Optional Custom Video Section */
+    .video-section {
+      padding: 0 0 36px;
+    }
+
+    .video-card {
+      border-radius: 28px;
+      padding: 22px;
+    }
+
+    .video-frame {
+      aspect-ratio: 16 / 9;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #0f131a;
+      margin-top: 14px;
+    }
+
+    .video-frame iframe,
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    /* Secret Admin Modal Overlay */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: rgba(8, 11, 16, 0.68);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+
+    @media (min-width: 640px) {
+      .modal-backdrop {
+        align-items: center;
+        padding: 24px;
+      }
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+      animation: fadeBackdrop 180ms var(--ease-smooth);
+    }
+
+    .modal-panel {
+      width: 100%;
+      max-width: 920px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 28px 28px 0 0;
+      padding: 26px;
+      background: linear-gradient(160deg, rgba(32, 38, 49, 0.90), rgba(18, 22, 30, 0.94));
+      backdrop-filter: blur(34px) saturate(185%);
+      -webkit-backdrop-filter: blur(34px) saturate(185%);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.32), 0 28px 70px rgba(0, 0, 0, 0.65);
+      animation: flyInUp 280ms var(--ease-liquid);
+    }
+
+    @media (min-width: 640px) {
+      .modal-panel { border-radius: 28px; }
+    }
+
+    @keyframes fadeBackdrop {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .admin-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .admin-item-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .admin-item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .color-check-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      min-height: 36px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .status-feedback {
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      border-radius: 14px;
+      margin-top: 10px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.30);
+      color: var(--text-primary);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .light-pool { animation: none !important; }
+      .fly-in, .scroll-reveal { opacity: 1 !important; transform: none !important; filter: none !important; }
+    }
+  </style>
+</head>
+<body id="top">
+  <div class="liquid-backdrop" aria-hidden="true">
+    <div class="pulse-caustic-wave"></div>
+    <div class="pulse-caustic-ring"></div>
+    <div class="light-pool light-pool-blue"></div>
+    <div class="light-pool light-pool-teal"></div>
+    <div class="light-pool light-pool-emerald"></div>
+  </div>
+
+  <!-- Main Storefront View -->
+  <main id="storefront-view">
+    <!-- Welcome Hero -->
+    <section class="welcome-section">
+      <div class="container">
+        <div class="welcome-glass-card liquid-glass liquid-interactive fly-in" style="--delay:40ms;">
+          <div class="welcome-caustic-clip" aria-hidden="true">
+            <div class="welcome-caustic-sweep"></div>
+          </div>
+          <h1 class="welcome-title">Welcome</h1>
+          <p class="welcome-copy">
+            Thanks for looking into my store, 💫 I'm just tryna make some cash lol. Our products are cheap, high quality, and, idk u should just buy. ✌️ Feel free to explore what we've got down below. 👀
+          </p>
+          <div class="welcome-actions">
+            <a href="#catalog" class="glass-btn glass-btn-accent liquid-interactive">Explore Prints</a>
+            <a href="#pickup" class="glass-btn liquid-interactive">How Pickup Works</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Catalog Section -->
+    <section id="catalog" class="catalog-section" aria-labelledby="catalog-heading">
+      <div class="container">
+        <div class="section-top fly-in" style="--delay:120ms;">
+          <div>
+            <h2 id="catalog-heading" class="section-title">Print Menu</h2>
+            <p class="section-subtitle" id="catalog-count-label">Showing 6 prints · Click any item to customize and request</p>
+          </div>
+
+          <div class="catalog-controls">
+            <div class="sliding-pill-track" id="category-pill-track" role="group" aria-label="Filter prints by category">
+              <div class="sliding-glass-lens" id="category-lens" aria-hidden="true"></div>
+              <button type="button" class="pill-tab-btn" data-category="All" aria-pressed="true">All</button>
+              <button type="button" class="pill-tab-btn" data-category="Fidgets" aria-pressed="false">Fidgets</button>
+              <button type="button" class="pill-tab-btn" data-category="Flexi Toys" aria-pressed="false">Flexi Toys</button>
+              <button type="button" class="pill-tab-btn" data-category="Desk Gear" aria-pressed="false">Desk Gear</button>
+            </div>
+
+            <div class="sort-box">
+              <label for="catalog-sort" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Sort prints by price</label>
+              <select id="catalog-sort" class="sort-select" aria-label="Sort prints by price">
+                <option value="default">Sort: Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+              </select>
+              <svg class="sort-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </div>
+
+            <div class="search-box">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <label for="catalog-search" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Search prints</label>
+              <input
+                type="search"
+                id="catalog-search"
+                class="search-input"
+                placeholder="Search prints..."
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div id="product-grid" class="product-grid" data-testid="product-grid"></div>
+      </div>
+    </section>
+
+    <!-- Optional Custom Video Section (hidden unless configured in #admin) -->
+    <section id="custom-video-section" class="video-section" aria-labelledby="custom-video-heading" hidden>
+      <div class="container">
+        <div class="video-card liquid-glass scroll-reveal">
+          <h2 id="custom-video-heading" class="section-title" style="font-size:1.3rem;">Product Preview</h2>
+          <div id="custom-video-frame" class="video-frame"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How Pickup Works Section -->
+    <section id="pickup" class="pickup-section" aria-labelledby="pickup-heading">
+      <div class="container">
+        <div class="pickup-shell liquid-glass liquid-interactive scroll-reveal">
+          <div>
+            <h2 id="pickup-heading" class="section-title">How Pickup Works</h2>
+            <p class="section-subtitle">Cash in person only. No online payment or account needed.</p>
+          </div>
+
+          <div class="pickup-grid">
+            <div class="pickup-step-card">
+              <div class="pickup-step-num">01</div>
+              <div class="pickup-step-title">Pick an item and color.</div>
+            </div>
+
+            <div class="pickup-step-card">
+              <div class="pickup-step-num">02</div>
+              <div class="pickup-step-title">I see it, print it, or contact you if needed.</div>
+            </div>
+
+            <div class="pickup-step-card">
+              <div class="pickup-step-num">03</div>
+              <div class="pickup-step-title">Pay full cash in person.</div>
+              <p class="pickup-step-desc">
+                Once it's done, I'll let you know so we can arrange pickup or meet up. Please bring the full amount in cash only—no partial payments, and no refunds.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Dedicated Product Detail & Order View (Opened when clicking any Product Card) -->
+  <section id="product-detail-view" class="product-detail-view" aria-labelledby="detail-title" hidden>
+    <div class="container">
+      <div class="detail-topbar">
+        <button type="button" id="detail-back-btn" class="glass-btn liquid-interactive" aria-label="Back to catalog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+          <span>Back to Menu</span>
+        </button>
+
+        <button type="button" id="detail-zoom-btn" class="glass-btn glass-circle-btn liquid-interactive" aria-label="Toggle close-up photo zoom" title="Zoom photo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3M11 8v6M8 11h6"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="detail-shell liquid-glass">
+        <!-- Left: Pictures & Color Customizer -->
+        <div class="detail-gallery">
+          <div id="detail-main-frame" class="detail-main-frame">
+            <img id="detail-main-img" src="" alt="" referrerpolicy="no-referrer" />
+            <div id="detail-svg-fallback" hidden></div>
+          </div>
+
+          <div class="detail-color-bar">
+            <div style="display:flex;align-items:center;gap:8px;font-size:0.88rem;">
+              <span style="color:var(--text-secondary);">Selected Color:</span>
+              <span id="detail-active-color-dot" style="width:12px;height:12px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,0.4);"></span>
+              <strong id="detail-active-color-name" style="color:var(--text-primary);"></strong>
+            </div>
+            <div id="detail-swatch-list" class="swatch-list" role="group" aria-label="Customize print color"></div>
+          </div>
+        </div>
+
+        <!-- Right: Product Info + Direct Order Request Form -->
+        <div>
+          <div class="detail-info-header">
+            <div id="detail-meta-line" class="card-meta-line" style="margin-bottom:8px;"></div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
+              <h1 id="detail-title" style="font-size:clamp(1.6rem,3vw,2.15rem);font-weight:700;"></h1>
+              <span id="detail-unit-price" class="detail-price-tag"></span>
+            </div>
+            <p id="detail-desc" style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;"></p>
+          </div>
+
+          <div id="detail-form-container">
+            <form id="order-form" class="form-grid" novalidate>
+              <div>
+                <label for="order-buyer-name" class="field-label">Your Name</label>
+                <input
+                  type="text"
+                  id="order-buyer-name"
+                  class="field-input"
+                  placeholder="Enter your name"
+                  autocomplete="name"
+                  required
+                />
+                <div id="err-buyer-name" class="field-error" hidden></div>
+              </div>
+
+              <div>
+                <label for="order-contact" class="field-label">Contact (Phone Number, Discord, or Email)</label>
+                <div class="sliding-pill-track" id="contact-pill-track" role="group" aria-label="Choose contact option" style="margin-bottom:10px;">
+                  <div class="sliding-glass-lens" id="contact-lens" aria-hidden="true"></div>
+                  <button type="button" class="pill-tab-btn" data-contact-method="Phone" aria-pressed="true">Phone Number</button>
+                  <button type="button" class="pill-tab-btn" data-contact-method="Discord" aria-pressed="false">Discord</button>
+                  <button type="button" class="pill-tab-btn" data-contact-method="Email" aria-pressed="false">Email</button>
+                </div>
+                <input
+                  type="text"
+                  id="order-contact"
+                  class="field-input"
+                  placeholder="Phone number, Discord, or email"
+                  required
+                />
+                <div id="err-contact" class="field-error" hidden></div>
+              </div>
+
+              <div>
+                <span class="field-label">Quantity</span>
+                <div class="liquid-stepper-pill">
+                  <button type="button" id="qty-dec" class="stepper-icon-btn" aria-label="Decrease quantity">−</button>
+                  <input type="number" id="order-qty-input" class="stepper-num-input" value="1" min="1" max="4" aria-label="Order quantity" />
+                  <button type="button" id="qty-inc" class="stepper-icon-btn" aria-label="Increase quantity">+</button>
+                </div>
+                <div id="err-qty" class="field-error" hidden></div>
+              </div>
+
+              <div>
+                <label for="order-notes" class="field-label">Optional Notes / Custom Color Mix</label>
+                <textarea
+                  id="order-notes"
+                  class="field-textarea"
+                  placeholder="Any color mix or pickup notes..."
+                ></textarea>
+              </div>
+
+              <div id="err-product-stock" class="field-error" hidden></div>
+
+              <div class="cash-summary-bar">
+                <div>
+                  <div style="font-size:0.84rem;font-weight:600;color:var(--text-primary);">Full cash due in person</div>
+                  <div style="font-size:0.76rem;color:var(--text-secondary);">Cash only · No partial payments · No refunds</div>
+                </div>
+                <div id="order-cash-total" class="cash-total-amount">$4.00</div>
+              </div>
+
+              <button type="submit" id="order-submit-btn" class="glass-btn glass-btn-accent liquid-interactive" style="width:100%;min-height:44px;font-size:0.95rem;">
+                Request Print
+              </button>
+            </form>
+          </div>
+
+          <div id="order-receipt-container" hidden>
+            <div class="receipt-box">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                <strong style="font-family:var(--font-display);font-size:1.1rem;color:var(--accent-emerald);">Request Sent</strong>
+                <span id="receipt-order-id" style="font-family:var(--font-mono);font-size:0.86rem;color:var(--text-primary);"></span>
+              </div>
+              <p id="receipt-ntfy-status" style="font-size:0.86rem;color:var(--text-secondary);"></p>
+              <div id="receipt-rows"></div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+              <button type="button" id="receipt-new-btn" class="glass-btn liquid-interactive" style="flex:1;">Order Another</button>
+              <button type="button" id="receipt-done-btn" class="glass-btn glass-btn-accent liquid-interactive" style="flex:1;">Back to Menu</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Liquid Glass Navigation Dock (Reference: image_e8673253.png) -->
+  <nav class="floating-glass-dock-wrap" aria-label="Main navigation">
+    <div class="floating-glass-dock" id="floating-dock-track">
+      <div class="sliding-glass-lens" id="dock-lens" aria-hidden="true"></div>
+      <button type="button" class="dock-item" data-dock-target="home" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path>
+        </svg>
+        <span>Home</span>
+      </button>
+      <button type="button" class="dock-item" data-dock-target="catalog">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+        <span>Catalog</span>
+      </button>
+      <button type="button" class="dock-item" data-dock-target="pickup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+          <path d="m3.3 7 8.7 5 8.7-5M12 22V12"></path>
+        </svg>
+        <span>Pickup</span>
+      </button>
+      <button type="button" class="dock-item" data-dock-target="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <span>Search</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Secret Admin Dashboard Modal (#admin or Ctrl+Shift+A) -->
+  <div id="admin-modal-backdrop" class="modal-backdrop" role="presentation" aria-hidden="true">
+    <div
+      id="admin-modal-panel"
+      class="modal-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="admin-modal-title"
+    >
+      <div class="modal-header">
+        <div>
+          <h2 id="admin-modal-title" style="font-size:1.35rem;font-weight:700;">Owner Admin Panel</h2>
+          <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:2px;">
+            Manage catalog items, stock status, order log, and ntfy.sh alerts
+          </p>
+        </div>
+        <button type="button" id="admin-modal-close" class="glass-btn glass-circle-btn" aria-label="Close admin panel">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Owner Google Sign-In Gate -->
+      <div id="admin-auth-gate" style="padding:22px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.16);text-align:center;">
+        <h3 style="font-size:1.08rem;font-weight:600;margin-bottom:8px;">Owner Sign-In Required</h3>
+        <p id="admin-auth-desc" style="font-size:0.88rem;color:var(--text-secondary);max-width:46ch;margin:0 auto 18px;line-height:1.55;">
+          Sign in with your owner Google account (koolm6948@gmail.com) so every change you make saves to the database and syncs live for everyone.
+        </p>
+        <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;">
+          <button type="button" id="admin-google-signin-btn" class="glass-btn glass-btn-accent">Sign in with Google</button>
+          <button type="button" id="admin-signout-switch-btn" class="glass-btn" hidden>Sign Out</button>
+        </div>
+        <div id="admin-auth-error" class="field-error" style="margin-top:12px;" hidden></div>
+      </div>
+
+      <div id="admin-workspace" hidden>
+        <div id="admin-auth-bar" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding:10px 14px;border-radius:16px;background:rgba(52,211,153,0.10);border:1px solid rgba(52,211,153,0.28);">
+          <div style="font-size:0.84rem;color:var(--text-primary);">
+            <span style="color:var(--accent-emerald);font-weight:600;">Live Sync Active</span>
+            <span aria-hidden="true"> · </span>
+            <span id="admin-signed-in-email" style="color:var(--text-secondary);"></span>
+          </div>
+          <button type="button" id="admin-signout-btn" class="glass-btn" style="min-height:34px;padding:5px 14px;font-size:0.78rem;">Sign Out</button>
+        </div>
+
+        <div class="sliding-pill-track" id="admin-pill-track" role="tablist" aria-label="Admin sections" style="margin-bottom:20px;">
+          <div class="sliding-glass-lens" id="admin-lens" aria-hidden="true"></div>
+          <button type="button" class="pill-tab-btn" role="tab" data-admin-tab="products" aria-selected="true">Products</button>
+          <button type="button" class="pill-tab-btn" role="tab" data-admin-tab="orders" aria-selected="false">Orders (<span id="admin-orders-count">0</span>)</button>
+          <button type="button" class="pill-tab-btn" role="tab" data-admin-tab="settings" aria-selected="false">Settings</button>
+        </div>
+
+      <!-- Tab 1: Products Manager -->
+      <div id="admin-tab-products">
+        <form id="admin-product-form" class="form-grid" style="padding:18px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.14);" novalidate>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <strong id="admin-form-heading" style="font-family:var(--font-display);font-size:0.98rem;">Add New Print Item</strong>
+            <button type="button" id="admin-cancel-edit-btn" class="glass-btn" style="min-height:34px;padding:5px 14px;font-size:0.78rem;" hidden>Cancel Edit</button>
+          </div>
+          <input type="hidden" id="admin-edit-id" value="" />
+
+          <div class="form-row-2">
+            <div>
+              <label for="admin-prod-title" class="field-label">Product Title</label>
+              <input type="text" id="admin-prod-title" class="field-input" placeholder="e.g. Gyroscope Fidget Ring" required />
+            </div>
+            <div>
+              <label for="admin-prod-price" class="field-label">Price (USD Cash)</label>
+              <input type="number" id="admin-prod-price" class="field-input" step="0.25" min="0.25" placeholder="4.50" required />
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div>
+              <label for="admin-prod-category" class="field-label">Category</label>
+              <select id="admin-prod-category" class="field-select">
+                <option value="Fidgets">Fidgets</option>
+                <option value="Flexi Toys">Flexi Toys</option>
+                <option value="Desk Gear">Desk Gear</option>
+              </select>
+            </div>
+            <div>
+              <label for="admin-prod-image" class="field-label">Image URL (optional)</label>
+              <input type="url" id="admin-prod-image" class="field-input" placeholder="https://... or ./assets/images/..." />
+            </div>
+          </div>
+
+          <div>
+            <label for="admin-prod-desc" class="field-label">Description</label>
+            <textarea id="admin-prod-desc" class="field-textarea" placeholder="Short description of the item."></textarea>
+          </div>
+
+          <div>
+            <span class="field-label">Available Colors</span>
+            <div id="admin-color-checkboxes" class="checkbox-grid"></div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <label style="display:inline-flex;align-items:center;gap:8px;font-size:0.88rem;cursor:pointer;">
+              <input type="checkbox" id="admin-prod-instock" checked />
+              In Stock
+            </label>
+            <button type="submit" id="admin-save-prod-btn" class="glass-btn glass-btn-accent">Add Product</button>
+          </div>
+          <div id="admin-prod-error" class="field-error" hidden></div>
+        </form>
+
+        <div id="admin-products-list" class="admin-list"></div>
+      </div>
+
+      <!-- Tab 2: Orders Log -->
+      <div id="admin-tab-orders" hidden>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+          <p style="font-size:0.88rem;color:var(--text-secondary);">Live orders synced across all devices</p>
+          <button type="button" id="admin-clear-orders-btn" class="glass-btn glass-btn-danger" style="min-height:36px;padding:6px 14px;font-size:0.8rem;">
+            Clear Order Log
+          </button>
+        </div>
+        <div id="admin-orders-list" class="admin-list"></div>
+      </div>
+
+      <!-- Tab 3: ntfy.sh & Demo Video Settings -->
+      <div id="admin-tab-settings" hidden>
+        <form id="admin-settings-form" class="form-grid" novalidate>
+          <div>
+            <label for="admin-ntfy-topic" class="field-label">NTFY_TOPIC Endpoint (ntfy.sh/&lt;topic&gt;)</label>
+            <input type="text" id="admin-ntfy-topic" class="field-input" placeholder="ziauddin-3dprints-209" />
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-top:5px;">
+              Subscribe to this topic in the ntfy app to receive instant high-priority push notifications.
+            </p>
+          </div>
+
+          <div>
+            <label for="admin-demo-video" class="field-label">Optional Product Video URL (YouTube or .mp4)</label>
+            <input type="url" id="admin-demo-video" class="field-input" placeholder="Leave blank to keep page minimal" />
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <button type="submit" class="glass-btn glass-btn-accent">Save Settings</button>
+            <button type="button" id="admin-test-ntfy-btn" class="glass-btn">Send Test Alert</button>
+            <button type="button" id="admin-reset-defaults-btn" class="glass-btn glass-btn-danger">Reset Default Catalog</button>
+          </div>
+          <div id="admin-settings-feedback" class="status-feedback" hidden></div>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/storefront.ts"></script>
+</body>
+</html>
